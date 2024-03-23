@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "255301579654",
+    "project_id": "foodiego-8aedc",
+    "storage_bucket": "foodiego-8aedc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255301579654:android:b688c1a1bdcdf8ebf97207",
+        "android_client_info": {
+          "package_name": "com.example.android.foodiego"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTJrtzhe9qiuEA-EXGEY8JfkkNFoJETRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
