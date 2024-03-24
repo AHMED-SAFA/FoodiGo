@@ -1,6 +1,5 @@
 package com.example.android.foodiego;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -15,23 +14,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 public class reg_user extends AppCompatActivity {
     ImageView imageView;
     Button reg_button;
-    Toolbar toolbar;
     FloatingActionButton floatingActionButton;
     DatabaseReference databaseReference;
     FirebaseAuth auth;
@@ -85,6 +78,8 @@ public class reg_user extends AppCompatActivity {
             }
         });
 
+        reg_button.setOnClickListener(v -> reg_user_details());
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -93,56 +88,39 @@ public class reg_user extends AppCompatActivity {
         imageView.setImageURI(selectedImageUri);
     }
 
-//    private void uploadData() {
-//        FirebaseUser user = auth.getCurrentUser();
-//
-//        if (user != null) {
-//            final String userId = user.getUid();
-//
-//            final String address = addressEditText.getText().toString();
-//            final String name = nameEditText.getText().toString();
-//
-//            if (selectedImageUri != null) {
-//                // Upload image to Firebase Storage
-//                final StorageReference imageRef = storageReference.child("profile_images/" + userId);
-//                imageRef.putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            // Get the download URL for the image
-//                            imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Uri> task) {
-//                                    if (task.isSuccessful()) {
-//                                        String imageUrl = task.getResult().toString();
-//                                        // Save user data with image URL to Firebase Realtime Database
-//                                        User userProfile = new User(userId, name, address, imageUrl);
-//                                        databaseReference.child(userId).setValue(userProfile);
-//
-//                                        addressEditText.setText("");
-//                                        nameEditText.setText("");
-//
-//                                        Toast.makeText(reg_user.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
-////                                        Intent intent = new Intent(creat_profile.this, profile.class);
-////                                        startActivity(intent);
-//                                    }
-//                                }
-//                            });
-//                        } else {
-//                            Toast.makeText(reg_user.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//            }
-//            else {
-//                // Save user data without image URL to Firebase Realtime Database
-//                User userProfile = new User(userId, name, nickname, age, address, "");
-//
-//                databaseReference.child(userId).setValue(userProfile);
-//                Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
+    private void reg_user_details() {
+        final String email = emailEditText.getText().toString().trim();
+        final String password = passEditText.getText().toString().trim();
+        final String name = nameEditText.getText().toString().trim();
+        final String mobile = mobileEditText.getText().toString().trim();
+        final String address = addressEditText.getText().toString().trim();
 
+        if (selectedImageUri != null && !email.isEmpty() && !password.isEmpty() && !name.isEmpty() && !mobile.isEmpty() && !address.isEmpty()) {
+            // Upload image to Firebase Storage
+            StorageReference imageRef = storageReference.child("profile_images/" + System.currentTimeMillis() + ".jpg");
+            imageRef.putFile(selectedImageUri)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                reg_class user = new reg_class(name, email, mobile, address, password);
 
+                                databaseReference.push().setValue(user)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                Toast.makeText(reg_user.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(this, log_user.class));
+                                                finish();
+                                            } else {
+                                                Toast.makeText(reg_user.this, "Failed to register. Please try again.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            });
+                        } else {
+                            Toast.makeText(reg_user.this, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(reg_user.this, "Please fill in all the details and select an image.", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

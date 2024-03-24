@@ -128,7 +128,7 @@
         android:inputType="textPassword"
         android:paddingLeft="20sp"
         android:textColorHint="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/up_button_id"
+        app:layout_constraintBottom_toTopOf="@+id/reg_button_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
