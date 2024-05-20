@@ -16,7 +16,6 @@ public class user extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         log_user = findViewById(R.id.btn_log_user);
-        log_owner = findViewById(R.id.btn_log_owner);
         reg_user = findViewById(R.id.btn_reg_user);
 
         log_user.setOnClickListener(v -> {
@@ -27,11 +26,5 @@ public class user extends AppCompatActivity {
             Intent i = new Intent(user.this,reg_user.class);
             startActivity(i);
         });
-        log_owner.setOnClickListener(v -> {
-            Intent i = new Intent(user.this,log_owner.class);
-            startActivity(i);
-        });
-
-
     }
 }

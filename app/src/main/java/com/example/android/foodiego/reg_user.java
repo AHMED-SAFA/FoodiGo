@@ -1,12 +1,10 @@
 package com.example.android.foodiego;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +15,7 @@ import android.widget.Toast;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +31,7 @@ public class reg_user extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference storageReference;
     Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +40,6 @@ public class reg_user extends AppCompatActivity {
         imageView = findViewById(R.id.img_id);
         floatingActionButton = findViewById(R.id.floatingActionButton_id);
         ImageButton eyeButton = findViewById(R.id.eye_button);
-        final EditText passwordEditText = findViewById(R.id.reg_password_editText);
-
         reg_button = findViewById(R.id.reg_button_id);
         addressEditText = findViewById(R.id.reg_address_editText);
         nameEditText = findViewById(R.id.reg_name_editText);
@@ -67,60 +65,93 @@ public class reg_user extends AppCompatActivity {
             public void onClick(View v) {
                 if (isPasswordVisible) {
                     // Hide the password
-                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     eyeButton.setImageResource(R.drawable.ic_eye_close);
                 } else {
                     // Show the password
-                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    passEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                     eyeButton.setImageResource(R.drawable.ic_eye_open);
                 }
                 isPasswordVisible = !isPasswordVisible;
             }
         });
 
-        reg_button.setOnClickListener(v -> reg_user_details());
+        auth = FirebaseAuth.getInstance();
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null)
+        {
+            startActivity(new Intent(this, home.class ));
+            finish();
+        }
+        else
+            reg_button.setOnClickListener(v -> reg_user_details());
 
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
         selectedImageUri= data.getData();
         imageView.setImageURI(selectedImageUri);
     }
+private void reg_user_details() {
+    final String name = nameEditText.getText().toString();
+    final String email = emailEditText.getText().toString();
+    final String password = passEditText.getText().toString();
+    final String address = addressEditText.getText().toString();
+    final String mobile = mobileEditText.getText().toString();
 
-    private void reg_user_details() {
-        final String email = emailEditText.getText().toString().trim();
-        final String password = passEditText.getText().toString().trim();
-        final String name = nameEditText.getText().toString().trim();
-        final String mobile = mobileEditText.getText().toString().trim();
-        final String address = addressEditText.getText().toString().trim();
-
-        if (selectedImageUri != null && !email.isEmpty() && !password.isEmpty() && !name.isEmpty() && !mobile.isEmpty() && !address.isEmpty()) {
-            // Upload image to Firebase Storage
-            StorageReference imageRef = storageReference.child("profile_images/" + System.currentTimeMillis() + ".jpg");
-            imageRef.putFile(selectedImageUri)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                reg_class user = new reg_class(name, email, mobile, address, password);
-
-                                databaseReference.push().setValue(user)
-                                        .addOnCompleteListener(task1 -> {
-                                            if (task1.isSuccessful()) {
-                                                Toast.makeText(reg_user.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(this, log_user.class));
-                                                finish();
-                                            } else {
-                                                Toast.makeText(reg_user.this, "Failed to register. Please try again.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            });
-                        } else {
-                            Toast.makeText(reg_user.this, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show();
+    if (name.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || mobile.isEmpty()) {
+        Toast.makeText(reg_user.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+        return;
+    }
+    auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(reg_user.this, task -> {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
+                    if (user != null) {
+                        // Upload image to Firebase Storage if selectedImageUri is not null
+                        if (selectedImageUri != null) {
+                            StorageReference imageRef = storageReference.child("images/" + user.getUid() + "/profile.jpg");
+                            imageRef.putFile(selectedImageUri)
+                                    .addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            // Get the download URL for the image
+                                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                                // Save user details to Realtime Database
+                                                String imageUrl = uri.toString();
+                                                reg_class userObject = new reg_class(name, email, address, mobile,password,imageUrl);
+                                                databaseReference.child(user.getUid()).child("registered_profile").setValue(userObject)
+                                                        .addOnCompleteListener(task2 -> {
+                                                            if (task2.isSuccessful()) {
+                                                                Toast.makeText(reg_user.this, "Registration successful", Toast.LENGTH_LONG).show();
+                                                                startActivity(new Intent(reg_user.this, log_user.class));
+                                                                finish();
+                                                            } else
+                                                                Toast.makeText(reg_user.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+                                                        });
+                                            });
+                                        } else {
+                                            reg_class userObject = new reg_class(name, email, address, mobile,password,"");
+                                            databaseReference.child(user.getUid()).child("registered_profile").setValue(userObject)
+                                                    .addOnCompleteListener(task2 -> {
+                                                        if (task2.isSuccessful()) {
+                                                            Toast.makeText(reg_user.this, "Registration successful (without profile image)", Toast.LENGTH_LONG).show();
+                                                            startActivity(new Intent(reg_user.this, log_user.class));
+                                                            finish();
+                                                        } else
+                                                            Toast.makeText(reg_user.this, "Failed to register user 2", Toast.LENGTH_SHORT).show();
+                                                    });
+                                        }
+                                    });
+                            }
                         }
-                    });
-        } else {
-            Toast.makeText(reg_user.this, "Please fill in all the details and select an image.", Toast.LENGTH_SHORT).show();
-        }
+                    else
+                        Toast.makeText(reg_user.this, "User is null", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(reg_user.this, "user exists", Toast.LENGTH_SHORT).show();
+            });
     }
 }
