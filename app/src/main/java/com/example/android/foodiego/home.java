@@ -28,7 +28,7 @@ public class home extends AppCompatActivity {
     GridView gridView;
 
     int[] img_itemsarray = new int[]{
-        R.drawable.ban1, R.drawable.ban1,
+        R.drawable.ban1, R.drawable.ban3,
         R.drawable.ban2, R.drawable.ban3
     };
     String[] price_itemsarray = new String[]{
