@@ -29,7 +29,7 @@ public class home extends AppCompatActivity {
 
     int[] img_itemsarray = new int[]{
             R.drawable.ban1, R.drawable.ban3,
-        R.drawable.ban2, R.drawable.ban4
+        R.drawable.ban2, R.drawable.ban3
     };
     String[] price_itemsarray = new String[]{
         "20", "30",
