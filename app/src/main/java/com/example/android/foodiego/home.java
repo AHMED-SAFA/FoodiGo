@@ -28,7 +28,7 @@ public class home extends AppCompatActivity {
     GridView gridView;
 
     int[] img_itemsarray = new int[]{
-        R.drawable.ban1, R.drawable.ban3,
+            R.drawable.ban1, R.drawable.ban3,
         R.drawable.ban2, R.drawable.ban3
     };
     String[] price_itemsarray = new String[]{
@@ -36,8 +36,8 @@ public class home extends AppCompatActivity {
         "5", "25",
     };
     String[] desc_itemsarray = new String[]{
-        "Hello world3", "Whatsupp4",
-        "Hello world2", "count me in"
+        "Mixed Fried Meat", "Pizza",
+        "Vegetarian Salad", "Platter"
     };
 
     private final List<HomeObserver> observers = new ArrayList<>();
