@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="60sp"
         android:layout_marginBottom="531dp"
-        android:background="#C5DCF1"
+        android:background="#B4CCE3"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
