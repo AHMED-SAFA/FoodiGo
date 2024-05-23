@@ -4,20 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#8AF6D28A"
     android:layout_height="match_parent"
+    android:background="@drawable/splash_screen"
     tools:context=".splashScreen">
 
-    <TextView
-        android:id="@+id/splash_text_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FoodieGo"
-        android:textSize="50sp"
-        android:textColor="#3E0302"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Removed TextView -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

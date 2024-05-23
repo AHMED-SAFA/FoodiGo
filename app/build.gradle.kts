@@ -37,6 +37,7 @@ dependencies {
     //glide
     implementation ("com.github.bumptech.glide:glide:4.14.2")
     implementation("androidx.test:core:1.5.0")
+    implementation("androidx.activity:activity:1.8.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
 
     implementation("com.google.firebase:firebase-firestore:24.11.1")
@@ -61,5 +62,8 @@ dependencies {
     //image picker
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
+//
+//    implementation files("libs/sslCommerzSdk.aar")
+//    implementation ("com.google.code.gson:gson:2.9.0")
 
 }
