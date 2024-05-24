@@ -1,11 +1,9 @@
 package com.example.android.foodiego;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +34,9 @@ public class Cart extends AppCompatActivity {
     NavigationView navigationView;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
-    private List<CartPageItem> cartItems;
+    List<CartPageItem> cartItems;
     private TextView totalAmountTv;
-    private int itemTotalPrice = 0;
+    int itemTotalPrice = 0;
     Button button;
 
     @Override
@@ -125,7 +123,7 @@ public class Cart extends AppCompatActivity {
         else
             super.onBackPressed();
     }
-    private void fetchCartItems() {
+    void fetchCartItems() {
         // Get current user
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -160,7 +158,7 @@ public class Cart extends AppCompatActivity {
                         cartItems.add(cartPageItem);
                     }
                     // Update RecyclerView
-                    cartAdapter = new CartAdapter(Cart.this, cartItems);
+                    cartAdapter = new CartAdapter(cartItems);
                     recyclerView.setAdapter(cartAdapter);
 
                     // Update total amount TextView

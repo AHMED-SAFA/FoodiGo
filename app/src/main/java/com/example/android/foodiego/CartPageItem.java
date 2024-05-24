@@ -22,6 +22,10 @@ public class CartPageItem {
         this.currentDate = getCurrentDate();
         this.currentTime = getCurrentTime();
     }
+
+    public CartPageItem(String price, int quantity, int totalPrice, String date, String time) {
+    }
+
     public String getCurrentDate() {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
