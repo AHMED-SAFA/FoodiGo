@@ -23,8 +23,8 @@ public class CartPageItem {
         this.currentTime = getCurrentTime();
     }
 
-    public CartPageItem(String price, int quantity, int totalPrice, String date, String time) {
-    }
+//    public CartPageItem(String price, int quantity, int totalPrice, String date, String time) {
+//    }
 
     public String getCurrentDate() {
         @SuppressLint("SimpleDateFormat")

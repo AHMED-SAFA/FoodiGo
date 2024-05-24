@@ -1,5 +1,6 @@
 package com.example.android.foodiego;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,9 +35,9 @@ public class Cart extends AppCompatActivity {
     NavigationView navigationView;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
-    List<CartPageItem> cartItems;
+    private List<CartPageItem> cartItems;
     private TextView totalAmountTv;
-    int itemTotalPrice = 0;
+    private int itemTotalPrice = 0;
     Button button;
 
     @Override
@@ -65,24 +66,24 @@ public class Cart extends AppCompatActivity {
             {
                 startActivity(new Intent(this, home.class));
             }
-            if (item.getItemId() == R.id.nav_prev_order_id)
+            else if (item.getItemId() == R.id.nav_prev_order_id)
             {
                 startActivity(new Intent(this, prevOrder.class));
             }
-            if (item.getItemId() == R.id.nav_item_cart_id )
+            else if (item.getItemId() == R.id.nav_item_cart_id )
             {
                 startActivity(new Intent(this, Cart.class));
                 finish();
             }
 
-            if (item.getItemId() == R.id.nav_item_logout_id)
+            else if (item.getItemId() == R.id.nav_item_logout_id)
             {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(this, user.class);
                 startActivity(intent);
                 finish();
             }
-            return false;
+            return true;
         });
 
         cartItems = new ArrayList<>();
@@ -123,7 +124,7 @@ public class Cart extends AppCompatActivity {
         else
             super.onBackPressed();
     }
-    void fetchCartItems() {
+    private void fetchCartItems() {
         // Get current user
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -131,7 +132,7 @@ public class Cart extends AppCompatActivity {
 
             // Reference to the current user's cart items
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId).child("cart_items");
+                .child(userId).child("cart_items");
 
             cartRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -158,7 +159,7 @@ public class Cart extends AppCompatActivity {
                         cartItems.add(cartPageItem);
                     }
                     // Update RecyclerView
-                    cartAdapter = new CartAdapter(cartItems);
+                    cartAdapter = new CartAdapter(Cart.this, cartItems);
                     recyclerView.setAdapter(cartAdapter);
 
                     // Update total amount TextView
@@ -185,11 +186,11 @@ public class Cart extends AppCompatActivity {
 
             // Reference to the current user's cart items
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId).child("cart_items");
+                .child(userId).child("cart_items");
 
             // Reference to the current user's order history
             DatabaseReference orderHistoryRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId).child("order_history");
+                .child(userId).child("order_history");
 
             // Get a unique key for the order
             String orderId = orderHistoryRef.push().getKey();
@@ -212,4 +213,3 @@ public class Cart extends AppCompatActivity {
         }
     }
 }
-

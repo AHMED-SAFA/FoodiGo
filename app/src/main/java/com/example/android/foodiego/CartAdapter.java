@@ -1,6 +1,6 @@
 package com.example.android.foodiego;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,23 +11,29 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
+    private Context context;
     private List<CartPageItem> cartItems;
 
-    public CartAdapter(List<CartPageItem> cartItems) {
+    public CartAdapter(Context context, List<CartPageItem> cartItems) {
+        this.context = context;
         this.cartItems = cartItems;
     }
 
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.cart_layout, parent, false);
         return new CartViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartPageItem cartItem = cartItems.get(position);
-        holder.bind(cartItem);
+        holder.tvItemPrice.setText(cartItem.getPrice());
+        holder.tvItemQuantity.setText(String.valueOf(cartItem.getQuantity()));
+        holder.tvTotalPrice.setText(String.valueOf(cartItem.getTotalPrice()));
+        holder.currentDate.setText(String.valueOf(cartItem.getCurrentDateDatabase()));
+        holder.currentTime.setText(String.valueOf(cartItem.getCurrentTimeDatabase()));
     }
 
     @Override
@@ -36,29 +42,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public static class CartViewHolder extends RecyclerView.ViewHolder {
-
-        TextView productPriceTextView;
-        TextView currentDateTextView;
-        TextView currentTimeTextView;
-        TextView totalQuantityTextView;
-        TextView totalPriceTextView;
+        TextView tvItemPrice, tvItemQuantity, tvTotalPrice,currentDate,currentTime;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            productPriceTextView = itemView.findViewById(R.id.product_price);
-            currentDateTextView = itemView.findViewById(R.id.current_date);
-            currentTimeTextView = itemView.findViewById(R.id.current_time);
-            totalQuantityTextView = itemView.findViewById(R.id.tot_quantity);
-            totalPriceTextView = itemView.findViewById(R.id.tot_price);
-        }
-
-        @SuppressLint("SetTextI18n")
-        public void bind(CartPageItem cartItem) {
-            productPriceTextView.setText("Product Price: " + cartItem.getPrice());
-            currentDateTextView.setText("Ordered Date: " + cartItem.getCurrentDate());
-            currentTimeTextView.setText("Ordered Time: " + cartItem.getCurrentTime());
-            totalQuantityTextView.setText("Total Quantity: " + cartItem.getQuantity());
-            totalPriceTextView.setText("Total Price: " + cartItem.getTotalPrice());
+            tvItemPrice = itemView.findViewById(R.id.tv_item_price);
+            tvItemQuantity = itemView.findViewById(R.id.tv_item_quantity);
+            tvTotalPrice = itemView.findViewById(R.id.tv_total_price);
+            currentDate = itemView.findViewById(R.id.current_date);
+            currentTime = itemView.findViewById(R.id.current_time);
         }
     }
 }
