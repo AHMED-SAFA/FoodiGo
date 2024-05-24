@@ -4,5 +4,4 @@ import android.view.MenuItem;
 
 public interface HomeObserver {
     void onNavigationItemSelected(MenuItem item);
-    // Add more methods as needed
 }

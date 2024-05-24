@@ -7,7 +7,7 @@
     <color name="status_bar_color">#000000</color>
     <color name="orange">#FA693B</color>
     <color name="green">#0B5345</color>
-    <color name="blue">#0C8CEA</color>
+<!--    <color name="blue">#0C8CEA</color>-->
     <color name="violet">#EACC0C</color>
 
 </resources>

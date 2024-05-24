@@ -19,8 +19,6 @@ public class OrderHistoryAdapter extends ArrayAdapter<CartPageItem> {
         mOrders = orders;
     }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -42,9 +40,4 @@ public class OrderHistoryAdapter extends ArrayAdapter<CartPageItem> {
 
         return listItem;
     }
-
-
-
-
-
 }

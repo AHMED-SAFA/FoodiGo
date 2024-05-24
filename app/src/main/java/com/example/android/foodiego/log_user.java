@@ -38,6 +38,12 @@ public class log_user extends AppCompatActivity {
         String email = LoginEmailEditText.getText().toString();
         String password = LoginPasswordEditText.getText().toString();
 
+        // Check if email or password is empty
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Email and password cannot be empty.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         FirebaseAuthInstance.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this, task -> {
                 if (task.isSuccessful()) {
@@ -56,7 +62,7 @@ public class log_user extends AppCompatActivity {
             });
     }
 
-    // Singleton implementation for FirebaseAuth
+    // Singleton implementation
     private static class FirebaseAuthInstance {
         private static FirebaseAuth instance;
 
