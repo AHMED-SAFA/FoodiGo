@@ -95,63 +95,63 @@ public class reg_user extends AppCompatActivity {
         selectedImageUri= data.getData();
         imageView.setImageURI(selectedImageUri);
     }
-private void reg_user_details() {
-    final String name = nameEditText.getText().toString();
-    final String email = emailEditText.getText().toString();
-    final String password = passEditText.getText().toString();
-    final String address = addressEditText.getText().toString();
-    final String mobile = mobileEditText.getText().toString();
+    private void reg_user_details() {
+        final String name = nameEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final String password = passEditText.getText().toString();
+        final String address = addressEditText.getText().toString();
+        final String mobile = mobileEditText.getText().toString();
 
-    if (name.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || mobile.isEmpty()) {
-        Toast.makeText(reg_user.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
-        return;
-    }
-    auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(reg_user.this, task -> {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = auth.getCurrentUser();
-                    if (user != null) {
-                        // Upload image to Firebase Storage if selectedImageUri is not null
-                        if (selectedImageUri != null) {
-                            StorageReference imageRef = storageReference.child("images/" + user.getUid() + "/profile.jpg");
-                            imageRef.putFile(selectedImageUri)
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            // Get the download URL for the image
-                                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                                // Save user details to Realtime Database
-                                                String imageUrl = uri.toString();
-                                                reg_class userObject = new reg_class(name, email, address, mobile,password,imageUrl);
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty() || mobile.isEmpty()) {
+            Toast.makeText(reg_user.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(reg_user.this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            // Upload image to Firebase Storage if selectedImageUri is not null
+                            if (selectedImageUri != null) {
+                                StorageReference imageRef = storageReference.child("images/" + user.getUid() + "/profile.jpg");
+                                imageRef.putFile(selectedImageUri)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // Get the download URL for the image
+                                                imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                                    // Save user details to Realtime Database
+                                                    String imageUrl = uri.toString();
+                                                    reg_class userObject = new reg_class(name, email, address, mobile,password,imageUrl);
+                                                    databaseReference.child(user.getUid()).child("registered_profile").setValue(userObject)
+                                                            .addOnCompleteListener(task2 -> {
+                                                                if (task2.isSuccessful()) {
+                                                                    Toast.makeText(reg_user.this, "Registration successful", Toast.LENGTH_LONG).show();
+                                                                    startActivity(new Intent(reg_user.this, log_user.class));
+                                                                    finish();
+                                                                } else
+                                                                    Toast.makeText(reg_user.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+                                                            });
+                                                });
+                                            } else {
+                                                reg_class userObject = new reg_class(name, email, address, mobile,password,"");
                                                 databaseReference.child(user.getUid()).child("registered_profile").setValue(userObject)
                                                         .addOnCompleteListener(task2 -> {
                                                             if (task2.isSuccessful()) {
-                                                                Toast.makeText(reg_user.this, "Registration successful", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(reg_user.this, "Registration successful (without profile image)", Toast.LENGTH_LONG).show();
                                                                 startActivity(new Intent(reg_user.this, log_user.class));
                                                                 finish();
                                                             } else
-                                                                Toast.makeText(reg_user.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(reg_user.this, "Failed to register user 2", Toast.LENGTH_SHORT).show();
                                                         });
-                                            });
-                                        } else {
-                                            reg_class userObject = new reg_class(name, email, address, mobile,password,"");
-                                            databaseReference.child(user.getUid()).child("registered_profile").setValue(userObject)
-                                                    .addOnCompleteListener(task2 -> {
-                                                        if (task2.isSuccessful()) {
-                                                            Toast.makeText(reg_user.this, "Registration successful (without profile image)", Toast.LENGTH_LONG).show();
-                                                            startActivity(new Intent(reg_user.this, log_user.class));
-                                                            finish();
-                                                        } else
-                                                            Toast.makeText(reg_user.this, "Failed to register user 2", Toast.LENGTH_SHORT).show();
-                                                    });
-                                        }
-                                    });
+                                            }
+                                        });
                             }
                         }
+                        else
+                            Toast.makeText(reg_user.this, "User is null", Toast.LENGTH_SHORT).show();
+                    }
                     else
-                        Toast.makeText(reg_user.this, "User is null", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(reg_user.this, "user exists", Toast.LENGTH_SHORT).show();
-            });
-    }
+                        Toast.makeText(reg_user.this, "user exists", Toast.LENGTH_SHORT).show();
+       });
+}
 }

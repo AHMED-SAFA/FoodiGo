@@ -1,3 +1,5 @@
+val androidTestImplementation: Unit = Unit
+
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
@@ -55,6 +57,20 @@ dependencies {
     //tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test:rules:1.4.0")
+    androidTestImplementation ("androidx.test:runner:1.4.0")
+    dependencies {
+        // Other dependencies...
+
+        // Testing dependencies
+
+       
+
+        androidTestImplementation ("androidx.test.ext:junit:1.1.3")
+        androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+    }
+
+
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation ("org.mockito:mockito-core:3.12.4")
     androidTestImplementation ("org.mockito:mockito-android:3.11.2")
