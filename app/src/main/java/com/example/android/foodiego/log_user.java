@@ -53,7 +53,7 @@ public class log_user extends AppCompatActivity {
                         startActivity(new Intent(this, home.class));
                         finish();
                     } else {
-                        Toast.makeText(this, "User doeasn't exist. Register First", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "User doesn't exist. Register First", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(this, reg_user.class));
                     }
                 }
