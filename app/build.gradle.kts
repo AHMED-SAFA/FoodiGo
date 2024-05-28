@@ -59,27 +59,23 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.test:rules:1.4.0")
     androidTestImplementation ("androidx.test:runner:1.4.0")
-    dependencies {
-        // Other dependencies...
 
-        // Testing dependencies
-
-       
-
-        androidTestImplementation ("androidx.test.ext:junit:1.1.3")
-        androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
-    }
+    
+//    dependencies {
+//        // Other dependencies...
+//
+//        // Testing dependencies
+//
+////        androidTestImplementation ("androidx.test.ext:junit:1.1.3")
+////        androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+//    }
 
 
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    testImplementation ("org.mockito:mockito-core:3.12.4")
-    androidTestImplementation ("org.mockito:mockito-android:3.11.2")
 
     //image picker
     implementation ("com.github.dhaval2404:imagepicker:2.1")
     implementation ("com.squareup.picasso:picasso:2.71828")
-//
-//    implementation files("libs/sslCommerzSdk.aar")
-//    implementation ("com.google.code.gson:gson:2.9.0")
+
 
 }
