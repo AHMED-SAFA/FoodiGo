@@ -22,7 +22,7 @@ public class RegClassTest {
         assertEquals(testEmail, user.getEmail());
         assertEquals(testAddress, user.getAddress());
         assertEquals(testMobile, user.getMobile());
-        assertEquals(testPassword, user.getPassword()); // Updated to getPassword()
+        assertEquals(testPassword, user.getPassword());
         assertEquals(testProfileImageUrl, user.getProfileImageUrl());
     }
 
