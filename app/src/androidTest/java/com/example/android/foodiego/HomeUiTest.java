@@ -21,7 +21,7 @@ public class HomeUiTest {
     public ActivityScenarioRule<home> activityScenarioRule = new ActivityScenarioRule<>(home.class);
     @Test
     public void testViewExists() {
-        // Check if the grid view exists
+        // Check for grid view
         Espresso.onView(withId(R.id.grid_view))
             .check(matches(isDisplayed()));
     }
