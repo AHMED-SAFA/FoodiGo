@@ -84,53 +84,232 @@ public class productDetails extends AppCompatActivity {
         priceTextView.setText("Price: " + itemPrice + " $");
         descTextView.setText(itemDescription);
     }
-    private void addToCart() {
 
+//private void addToCart() {
+//    // Get the current user
+//    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//    if (user != null) {
+//        // Get user ID
+//        String userId = user.getUid();
+//
+//        // Get reference to the cart_items node for the user
+//        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart_items");
+//
+//        // Generate a unique key for the new cart item
+//        String cartItemId = cartRef.push().getKey();
+//
+//        // Calculate total price
+//        int totPrice = Integer.parseInt(itemPrice) * totQuantity;
+//
+//        // Create a new CartPageItem
+//        CartPageItem cartPageItem = new CartPageItem(itemPrice, totQuantity, totPrice);
+//
+//        // Add the new item to the cart
+//        if (cartItemId != null) {
+//            cartRef.child(cartItemId).setValue(cartPageItem)
+//                .addOnSuccessListener(aVoid -> {
+//                    Toast.makeText(getApplicationContext(), "Item added to cart", Toast.LENGTH_SHORT).show();
+//                })
+//                .addOnFailureListener(e -> {
+//                    Toast.makeText(getApplicationContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+//                });
+//        }
+//        else {
+//            Toast.makeText(getApplicationContext(), "Failed to generate cart item ID", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    else {
+//        Toast.makeText(getApplicationContext(), "Please sign in to add items to cart", Toast.LENGTH_SHORT).show();
+//    }
+//}
+
+
+//    private void addToCart() {
+//        // Get the current user
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user != null) {
+//            // Get user ID
+//            String userId = user.getUid();
+//
+//            // Get reference to the cart_items node for the user
+//            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart_items");
+//
+//            // Check if item with the same price exists in the cart
+//            cartRef.orderByChild("price").equalTo(itemPrice).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            // Get existing cart item
+//                            CartPageItem existingItem = snapshot.getValue(CartPageItem.class);
+//
+//                            // Update quantity and total price
+//                            int updatedQuantity = existingItem.getQuantity() + totQuantity;
+//                            int updatedTotalPrice = Integer.parseInt(itemPrice) * updatedQuantity;
+//
+//                            // Update existing item in the cart
+//                            snapshot.getRef().child("quantity").setValue(updatedQuantity);
+//                            snapshot.getRef().child("totalPrice").setValue(updatedTotalPrice);
+//
+//                            Toast.makeText(getApplicationContext(), "Item quantity updated in cart", Toast.LENGTH_SHORT).show();
+//                            return; // Exit loop after updating the item
+//                        }
+//                    }
+//                    else {
+//                        // If item with the same price does not exist, add it to the cart
+//                        String cartItemId = cartRef.push().getKey();
+//                        int totPrice = Integer.parseInt(itemPrice) * totQuantity;
+//
+//                        CartPageItem cartPageItem = new CartPageItem(itemPrice, totQuantity, totPrice);
+//
+//                        if (cartItemId != null) {
+//                            cartRef.child(cartItemId).setValue(cartPageItem)
+//                                .addOnSuccessListener(aVoid -> {
+//                                    Toast.makeText(getApplicationContext(), "Item added to cart", Toast.LENGTH_SHORT).show();
+//                                })
+//                                .addOnFailureListener(e -> {
+//                                    Toast.makeText(getApplicationContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+//                                });
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "Failed to generate cart item ID", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    Toast.makeText(getApplicationContext(), "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        } else {
+//            Toast.makeText(getApplicationContext(), "Please sign in to add items to cart", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+
+//    private void addToCart() {
+//        // Get the current user
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (user != null) {
+//            // Get user ID
+//            String userId = user.getUid();
+//
+//            // Get reference to the cart_items node for the user
+//            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart_items");
+//
+//            // Check if item already exists
+//            cartRef.orderByChild("price").equalTo(itemPrice).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    if (snapshot.exists()) {
+//                        // Item already exists, update quantity and total price
+//                        for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+//                            String cartItemId = itemSnapshot.getKey();
+//
+//                            int existingQuantity = itemSnapshot.child("quantity").getValue(Integer.class);
+//                            int newQuantity = existingQuantity + quantityToAdd;
+//                            int newTotalPrice = Integer.parseInt(itemPrice) * newQuantity;
+//
+////                            int existingQuantity = itemSnapshot.child("quantity").getValue(Integer.class);
+////                            int newQuantity = existingQuantity + 1;
+////                            int newTotalPrice = Integer.parseInt(itemPrice) * newQuantity;
+//
+//                            // Update cart item with new quantity and total price
+//                            cartRef.child(cartItemId).child("quantity").setValue(newQuantity);
+//                            cartRef.child(cartItemId).child("totalPrice").setValue(newTotalPrice)
+//                                .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), "Item quantity updated", Toast.LENGTH_SHORT).show())
+//                                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed to update cart", Toast.LENGTH_SHORT).show());
+//                            break; // Update only the first matching item (unique price)
+//                        }
+//                    } else {
+//                        // Item doesn't exist, add new item as before
+//                        String cartItemId = cartRef.push().getKey();
+//                        int totQuantity = 1; // Since item is added for the first time
+//                        int totPrice = Integer.parseInt(itemPrice) * totQuantity;
+//                        CartPageItem cartPageItem = new CartPageItem(itemPrice, totQuantity, totPrice);
+//
+//                        if (cartItemId != null) {
+//                            cartRef.child(cartItemId).setValue(cartPageItem)
+//                                .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), "Item added to cart", Toast.LENGTH_SHORT).show())
+//                                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show());
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "Failed to generate cart item ID", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                    // Handle database errors
+//                }
+//            });
+//        } else {
+//            Toast.makeText(getApplicationContext(), "Please sign in to add items to cart", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+
+
+    private void addToCart() {
+        // Get the current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            // Get user ID
             String userId = user.getUid();
 
+            // Get reference to the cart_items node for the user
             DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("cart_items");
-            cartRef.orderByChild("price").equalTo(String.valueOf(itemPrice)).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            // Check if item already exists
+            cartRef.orderByChild("price").equalTo(itemPrice).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            CartPageItem existingItem = snapshot.getValue(CartPageItem.class);
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Item already exists, update quantity and total price
+                        for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                            String cartItemId = itemSnapshot.getKey();
 
+                            // Get the existing quantity from the database
+                            int existingQuantity = itemSnapshot.child("quantity").getValue(Integer.class);
 
-                            // Increase the quantity and update total price of the existing item
-                            int updatedQuantity = existingItem.getQuantity() + totQuantity;
-                            int updatedPrice = Integer.parseInt(itemPrice) * updatedQuantity;
+                            // Calculate the quantity to add
+//                            int quantityToAdd = 1; // Increment by 1 for each addition
+                            int newQuantity = existingQuantity + totQuantity;
+                            int newTotalPrice = Integer.parseInt(itemPrice) * newQuantity;
 
-                            snapshot.getRef().child("quantity").setValue(updatedQuantity);
-                            snapshot.getRef().child("totalPrice").setValue(updatedPrice);
+                            // Update cart item with new quantity and total price
+                            cartRef.child(cartItemId).child("quantity").setValue(newQuantity);
+                            cartRef.child(cartItemId).child("totalPrice").setValue(newTotalPrice)
+                                .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), "Cart updated", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed to update cart", Toast.LENGTH_SHORT).show());
+                            break;
+                        }
+                    } else {
+                        String cartItemId = cartRef.push().getKey();
+                        int totPrice = Integer.parseInt(itemPrice) * totQuantity;
+                        CartPageItem cartPageItem = new CartPageItem(itemPrice, totQuantity, totPrice);
 
-                            Toast.makeText(getApplicationContext(), "Item quantity updated in cart", Toast.LENGTH_SHORT).show();
-                            return;
+                        if (cartItemId != null) {
+                            cartRef.child(cartItemId).setValue(cartPageItem)
+                                .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), "Item added to cart", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show());
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Failed to generate cart item ID", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-                    // If item does not exist, add it to the cart
-                    String cartItemId = cartRef.push().getKey();
-                    int totPrice = Integer.parseInt(itemPrice) * totQuantity;
-
-                    CartPageItem cartPageItem = new CartPageItem(itemPrice, totQuantity, totPrice);
-                    cartRef.child(cartItemId).setValue(cartPageItem)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getApplicationContext(), "Item added to cart", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(getApplicationContext(), "Failed to add item to cart", Toast.LENGTH_SHORT).show();
-                            });
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getApplicationContext(), "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle database errors
                 }
             });
-        }
-        else
+        } else {
             Toast.makeText(getApplicationContext(), "Please sign in to add items to cart", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
+
+
 }
