@@ -101,8 +101,8 @@ Continuous Integration (CI) testing is set up to automatically run tests on new 
   
 <h1>➡️Contributors</h1>
 <ul>
-  <li><h3><a href="https://github.com/souravdebnath109">Sourav Debnath</a></h2></li>
-  <li><h3><a href="https://github.com/AHMED-SAFA">Ahmed Nur E Safa</a></h2> </li>
-  <li><h3><a href="https://github.com/DsDipto7">Dipto Saha</a></h2></li>
+  <li><h4><a href="https://github.com/souravdebnath109">Sourav Debnath</a></h4></li>
+  <li><h4><a href="https://github.com/AHMED-SAFA">Ahmed Nur E Safa</a></h4> </li>
+  <li><h4><a href="https://github.com/DsDipto7">Dipto Saha</a></h4></li>
 </ul>
 
