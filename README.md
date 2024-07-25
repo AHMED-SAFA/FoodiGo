@@ -1,4 +1,4 @@
-# FoodiGo - Food Delivery and Ordering System
+<h1 align = "center">FoodiGo - Food Delivery and Ordering System</h1> 
 
 ![Screenshot (174)](https://github.com/AHMED-SAFA/FoodieGo/assets/111047763/f2e20a57-f8cd-48ca-bde8-b30ba85429cf)
 
